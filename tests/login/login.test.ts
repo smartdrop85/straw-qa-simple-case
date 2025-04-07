@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { existingUsers } from '../../test-setup/localstorage.setup'
+import { login } from '../../objects/login.obj'
 
 test.describe.configure({ mode: 'serial' })
 
@@ -10,17 +11,14 @@ test.describe('login form tests', () => {
     const existingUser = existingUsers[0]
 
     await page
-      .locator('#root form div:nth-child(1) > div > input')
+      .locator(login.emailField)
       .pressSequentially(existingUser.email)
 
     await page
-      .locator('#root form div:nth-child(2) > div > input')
+      .locator(login.passwordField)
       .pressSequentially(existingUser.password)
 
-    // Submit button
-    const button = page.locator('form .MuiButton-sizeMedium')
-    // Click on the button
-    button.click()
+    await page.locator(login.submitButton).click()
 
     // Wait for 1 second until page is fully loaded
     await page.waitForTimeout(1000)
