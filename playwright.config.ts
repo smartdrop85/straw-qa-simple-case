@@ -14,6 +14,8 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         // Use "database" with existing accounts
         storageState: setupFile,
+        // Use baseURL for relative URLs
+        baseURL: 'http://localhost:8080'
       },
       dependencies: ['setup'],
     },
