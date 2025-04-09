@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
+import { existingUsers } from '../../test-setup/localstorage.setup'
 import { registration } from '../../objects/registration.obj'
-import { existingUsers } from '../../test-setup/localStorage.setup'
 
 test.describe.configure({ mode: 'serial' })
 

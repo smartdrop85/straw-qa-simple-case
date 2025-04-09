@@ -4,12 +4,15 @@ import { login } from '../../objects/login.obj'
 
 test.describe.configure({ mode: 'serial' })
 
-test.describe('login form tests', () => {
+test.describe('login form', () => {
   const existingUser = existingUsers[0]
 
-  test('logging in works with existing account', async ({ page }) => {
+  test.beforeEach(async ({ page }) => {
     await page.goto('/login')
     await expect(page.locator(login.header)).toBeVisible()
+  })
+
+  test('log in works with existing account', async ({ page }) => {
     await expect(page.locator(login.header)).toContainText('Login')
 
     await expect(page.locator(login.emailLabel)).toBeVisible()
@@ -36,9 +39,6 @@ test.describe('login form tests', () => {
   })
 
   test('show password', async ({ page }) => {
-    await page.goto('/login')
-    await expect(page.locator(login.header)).toBeVisible()
-
     await expect(page.locator(login.emailLabel)).toBeVisible()
 
     await expect(page.locator(login.passwordLabel)).toBeVisible()
@@ -55,4 +55,19 @@ test.describe('login form tests', () => {
     await page.locator(login.hidePasswordIcon).click()
     await expect(page.locator(login.passwordField)).toHaveAttribute('type', 'password')
   })
+
+  test('cannot login with invalid credentials', async ({ page }) => {
+    await page
+      .locator(login.emailField)
+      .pressSequentially('invalid@mail.com')
+
+    await page
+      .locator(login.passwordField)
+      .pressSequentially('invalidPass')
+
+    await page.locator(login.submitButton).click()
+
+    await expect(page.getByText('Invalid credentials')).toBeVisible()
+  })
+
 })
